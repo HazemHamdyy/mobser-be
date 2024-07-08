@@ -20,26 +20,123 @@ Explore the API endpoints and interact with Mobser Backend Node.js Application u
 ## Endpoints Overview
 
 ### Authentication
-- **Forgot Password:** `/api/v1/auth/forgot-password` (POST)
-- **Update Password:** `/api/v1/auth/update-password` (PATCH)
-- **Update Email:** `/api/v1/auth/update-email` (PATCH)
-- **Device Login:** `/api/v1/auth/device-login` (POST)
-- **Logout:** `/api/v1/auth/logout` (GET)
+
+#### POST /auth/signup
+- **Description:** Signup for a new account.
+- **Body:**
+  - `phoneNumber`: User's phone number.
+  - `password`: User's password.
+  - `userType`: Type of user (e.g., 'user', 'relative').
+- **Responses:** Various response codes and messages based on input validity and success.
+
+#### POST /auth/login
+- **Description:** Login to an existing account.
+- **Body:**
+  - `email`: User's email address.
+  - `password`: User's password.
+  - `fcmToken` (optional): Firebase Cloud Messaging token.
+- **Responses:** Responses based on token validity and user status.
+
+#### GET /auth/verify-email/{token}
+- **Description:** Verify user's email (server-side).
+
+#### POST /auth/forgot-password
+- **Description:** Initiate password reset process.
+- **Body:** `email`: User's email address.
+- **Responses:** Responses based on email existence and success.
+
+#### PATCH /auth/update-password
+- **Description:** Update user's password.
+- **Authorization:** Bearer Token required.
+- **Body:**
+  - `currentPassword`: User's current password.
+  - `newPassword`: User's new password.
+- **Responses:** Responses based on password update success or failure.
+
+#### PATCH /auth/update-email
+- **Description:** Update user's email.
+- **Authorization:** Bearer Token required.
+- **Body:** `newEmail`: User's new email address.
+- **Responses:** Responses based on email update success or failure.
 
 ### Chat
-- No specific endpoint provided in the README.
+
+#### GET /chats/get-messages/{userId}
+- **Description:** Retrieve messages between current user and specified user.
+- **Authorization:** Bearer Token required.
+- **Query Params:** Pagination parameters (`page`, `limit`).
+
+#### POST /chats/upload-image
+- **Description:** Upload an image in chat.
+- **Authorization:** Bearer Token required.
+
+#### POST /chats/upload-audio
+- **Description:** Upload an audio file in chat.
+- **Authorization:** Bearer Token required.
+
+#### POST /chats/send-message
+- **Description:** Send a chat message.
+- **Authorization:** Bearer Token required.
+- **Body:**
+  - `to`: Recipient user ID.
+  - `message`: Content of the message.
+  - `messageType`: Type of message (e.g., text, image, audio).
 
 ### Users
-- No specific endpoint provided in the README.
 
-### Notification
-- No specific endpoint provided in the README.
+#### GET /users/me
+- **Description:** Retrieve current user information (excluding relatives).
+- **Authorization:** Bearer Token required.
 
-### Devices
-- No specific endpoint provided in the README.
+#### PATCH /users/me
+- **Description:** Update current user information.
+- **Authorization:** Bearer Token required.
+- **Body:** Fields to update, such as `name`, `phoneNumber`, `gender`, etc.
 
-### User Images
-- No specific endpoint provided in the README.
+#### DELETE /users/me
+- **Description:** Delete current user account.
+- **Authorization:** Bearer Token required.
+
+#### PATCH /users/add-relative
+- **Description:** Add a relative to current user.
+- **Authorization:** Bearer Token required.
+- **Body:** `relatives`: Array of usernames.
+
+#### GET /users/relatives
+- **Description:** Retrieve relatives of current user.
+- **Authorization:** Bearer Token required.
+
+#### GET /users/check-user/{username}
+- **Description:** Check if a username exists.
+- **Authorization:** None required.
+
+### Notifications
+
+#### POST /notifications/request-tracking
+- **Description:** Send a request tracking notification.
+- **Authorization:** Bearer Token required.
+
+#### POST /notifications/accept-tracking
+- **Description:** Accept a tracking notification.
+- **Authorization:** Bearer Token required.
+
+### Personal Assistant
+
+#### POST /assistant/send-prompt
+- **Description:** Send a prompt to the personal assistant.
+- **Authorization:** Bearer Token required.
+- **Body:**
+  - `message`: Content of the prompt.
+
+### Face Recognition
+
+#### POST /face-recognition/upload-images
+- **Description:** Upload images for face recognition.
+- **Authorization:** Bearer Token required.
+- **Body:** Form-data with fields:
+  - `files`: List of image files.
+  - `name`: Name associated with the images.
+
 
 ## Sample Requests and Responses
 
